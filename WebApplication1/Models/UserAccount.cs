@@ -1,4 +1,4 @@
-﻿namespace SkillConnect.Models;
+﻿namespace SkillHub.Models;
 
 public class UserAccount
 {

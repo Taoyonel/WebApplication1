@@ -29,7 +29,7 @@ app.MapControllerRoute(
 
 app.Run();*/
 
-using SkillConnect.Data;
+using SkillHub.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
