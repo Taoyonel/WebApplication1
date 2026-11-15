@@ -1,0 +1,37 @@
+﻿@{ ViewData["Title"] = "New Listing"; }
+<div class="container narrow section">
+    <div class="panel">
+        <h2>Publish a Listing</h2>
+        <form method="post" action="/Listings/Create">
+            <label>Title</label>
+            <input name="title" />
+
+            <label>Description</label>
+            <textarea name="description" rows="4"></textarea>
+
+            <div class="row2">
+                <div>
+                    <label>Category</label>
+                    <select name="category">
+                        @for (int i = 0; i < DataStore.Categories.Length; i++)
+                        {
+                            <option value="@DataStore.Categories[i]">@DataStore.Categories[i]</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label>Type</label>
+                    <select name="type">
+                        <option value="Tutor">Tutor</option>
+                        <option value="Service">Service</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Rate per hour (₱)</label>
+            <input name="rate" type="number" />
+
+            <button class="btn block">Publish</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿@{ ViewData["Title"] = "Register"; }
+<div class="container narrow section">
+    <div class="panel">
+        <h2>Create your account</h2>
+        <form method="post" action="/Account/Register">
+            <label>Full name</label>
+            <input name="fullName" />
+            <label>Email</label>
+            <input name="email" type="email" />
+            <label>Account type</label>
+            <select name="accountType">
+                <option value="Regular">Regular user (find tutors and services)</option>
+                <option value="Professional">Professional (offer tutoring and services)</option>
+            </select>
+            <label>Password</label>
+            <input name="password" type="password" />
+            <label>Confirm password</label>
+            <input name="confirmPassword" type="password" />
+            <button class="btn block">Register</button>
+        </form>
+        <p class="muted center">Already registered? <a href="/Account/Login">Login</a></p>
+    </div>
+</div>

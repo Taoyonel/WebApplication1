@@ -1,0 +1,42 @@
+﻿@model List<Listing>
+@{
+    ViewData["Title"] = "Browse";
+    string search = ViewBag.Search;
+    string selectedCategory = ViewBag.Category;
+}
+<div class="container section">
+    <div class="head">
+        <div>
+            <h1>Available Tutors and Services</h1>
+            <p class="muted">Select a category or search for what you need.</p>
+        </div>
+        <span class="pill">@Model.Count results</span>
+    </div>
+
+    <form method="get" action="/Listings" class="search light">
+        <input name="search" value="@search" placeholder="Search tutors or services..." />
+        <input type="hidden" name="category" value="@selectedCategory" />
+        <button class="btn">Search</button>
+    </form>
+
+    <div class="chips">
+        <a class="chip @(string.IsNullOrEmpty(selectedCategory) ? "active" : "")" href="/Listings">All</a>
+        @for (int i = 0; i < DataStore.Categories.Length; i++)
+        {
+            string c = DataStore.Categories[i];
+            <a class="chip @(selectedCategory == c ? "active" : "")" asp-controller="Listings" asp-action="Index" asp-route-category="@c">@c</a>
+        }
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty">No listings match your search.</div>
+    }
+
+    <div class="grid3">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <partial name="_ListingCard" model="Model[i]" />
+        }
+    </div>
+</div>

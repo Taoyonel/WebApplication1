@@ -1,4 +1,5 @@
-var builder = WebApplication.CreateBuilder(args);
+
+/*var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -26,4 +27,21 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 
+app.Run();*/
+
+using SkillConnect.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();   // lets us remember who is logged in
+
+var app = builder.Build();
+
+DataStore.LoadSampleData();      // adds the admin and sample listings
+
+app.UseStaticFiles();
+app.UseRouting();
+app.UseSession();
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();

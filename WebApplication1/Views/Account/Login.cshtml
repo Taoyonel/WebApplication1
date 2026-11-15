@@ -1,0 +1,14 @@
+﻿@{ ViewData["Title"] = "Login"; }
+<div class="container narrow section">
+    <div class="panel">
+        <h2>Welcome back</h2>
+        <form method="post" action="/Account/Login">
+            <label>Email</label>
+            <input name="email" type="email" />
+            <label>Password</label>
+            <input name="password" type="password" />
+            <button class="btn block">Login</button>
+        </form>
+        <p class="muted center">No account? <a href="/Account/Register">Register here</a></p>
+    </div>
+</div>

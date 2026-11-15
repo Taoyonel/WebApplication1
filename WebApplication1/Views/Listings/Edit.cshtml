@@ -1,0 +1,54 @@
+﻿@model Listing
+@{ ViewData["Title"] = "Edit Listing"; }
+<div class="container narrow section">
+    <div class="panel">
+        <h2>Edit Listing</h2>
+        <form method="post" action="/Listings/Edit/@Model.Id">
+            <label>Title</label>
+            <input name="title" value="@Model.Title" />
+
+            <label>Description</label>
+            <textarea name="description" rows="4">@Model.Description</textarea>
+
+            <div class="row2">
+                <div>
+                    <label>Category</label>
+                    <select name="category">
+    @for (int i = 0; i < DataStore.Categories.Length; i++)
+    {
+        string c = DataStore.Categories[i];
+        if (c == Model.Category)
+        {
+            <option value="@c" selected="selected">@c</option>
+        }
+        else
+        {
+            <option value="@c">@c</option>
+        }
+    }
+</select>
+                </div>
+                <div>
+                    <label>Type</label>
+                   <select name="type">
+    @if (Model.Type == "Tutor")
+    {
+        <option value="Tutor" selected="selected">Tutor</option>
+        <option value="Service">Service</option>
+    }
+    else
+    {
+        <option value="Tutor">Tutor</option>
+        <option value="Service" selected="selected">Service</option>
+    }
+</select>
+                </div>
+            </div>
+
+            <label>Rate per hour (₱)</label>
+            <input name="rate" type="number" value="@Model.HourlyRate.ToString("0")" />
+
+            <button class="btn block">Save Changes</button>
+        </form>
+    </div>
+</div>

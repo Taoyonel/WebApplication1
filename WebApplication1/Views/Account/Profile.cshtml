@@ -1,0 +1,31 @@
+﻿@model UserAccount
+@{ ViewData["Title"] = "My Profile"; }
+<div class="container narrow section">
+    <div class="panel">
+        <div class="profile-head">
+            <div class="avatar big">@Model.GetInitial()</div>
+            <div>
+                <h2>@Model.FullName</h2>
+                <span class="tag tutor">@Model.Role</span>
+                <div class="muted">@Model.Email</div>
+            </div>
+        </div>
+
+        <form method="post" action="/Account/Profile">
+            <label>Full name</label>
+            <input name="fullName" value="@Model.FullName" />
+            <label>Location</label>
+            <input name="location" value="@Model.Location" />
+            <label>About me / skills</label>
+            <textarea name="bio" rows="4">@Model.Bio</textarea>
+            <button class="btn block">Save Profile</button>
+        </form>
+
+        @if (Model.Role != "Admin")
+        {
+            <form method="post" action="/Account/DeleteAccount" onsubmit="return confirm('Delete your account permanently?');">
+                <button class="btn danger block">Delete My Account</button>
+            </form>
+        }
+    </div>
+</div>

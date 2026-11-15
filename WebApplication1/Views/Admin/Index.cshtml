@@ -1,0 +1,72 @@
+﻿@{ ViewData["Title"] = "Admin Dashboard"; }
+<div class="container section">
+    <h1>Admin Dashboard</h1>
+
+    <div class="grid4">
+        <div class="stat"><strong>@DataStore.CountUsersByRole("Regular")</strong><span>Regular users</span></div>
+        <div class="stat"><strong>@DataStore.CountUsersByRole("Professional")</strong><span>Professionals</span></div>
+        <div class="stat"><strong>@DataStore.Listings.Count</strong><span>Listings</span></div>
+        <div class="stat"><strong>@DataStore.Requests.Count</strong><span>Requests</span></div>
+    </div>
+
+    <h2>Users and Professional Profiles</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Email</th><th>Role</th><th>Location</th><th>Bio</th><th>Listings</th><th></th></tr>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < DataStore.Users.Count; i++)
+            {
+                UserAccount u = DataStore.Users[i];
+                <tr>
+                    <td>@u.FullName</td>
+                    <td>@u.Email</td>
+                    <td>@u.Role</td>
+                    <td>@u.Location</td>
+                    <td>@u.Bio</td>
+                    <td>@DataStore.CountListingsByOwner(u.Id)</td>
+                    <td class="actions">
+                        @if (u.Role != "Admin")
+                        {
+                            <form method="post" action="/Admin/DeleteUser" onsubmit="return confirm('Remove this user and everything they posted?');">
+                                <input type="hidden" name="id" value="@u.Id" />
+                                <button class="btn sm danger">Remove</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <h2>All Listings</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Title</th><th>Owner</th><th>Category</th><th>Rate</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < DataStore.Listings.Count; i++)
+            {
+                Listing l = DataStore.Listings[i];
+                UserAccount owner = DataStore.FindUserById(l.OwnerId);
+                <tr>
+                    <td><a href="/Listings/Details/@l.Id">@l.Title</a></td>
+                    <td>@owner.FullName</td>
+                    <td>@l.Category</td>
+                    <td>₱@l.HourlyRate.ToString("0")</td>
+                    <td>@(l.IsActive ? "Active" : "Inactive")</td>
+                    <td class="actions">
+                        <form method="post" action="/Admin/DeleteListing" onsubmit="return confirm('Remove this listing?');">
+                            <input type="hidden" name="id" value="@l.Id" />
+                            <button class="btn sm danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

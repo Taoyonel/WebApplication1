@@ -1,0 +1,14 @@
+﻿@model Listing
+@{ ViewData["Title"] = "Send Request"; }
+<div class="container narrow section">
+    <div class="panel">
+        <h2>Request: @Model.Title</h2>
+        <p class="muted">₱@Model.HourlyRate.ToString("0") / hour</p>
+        <form method="post" action="/Requests/Create">
+            <input type="hidden" name="listingId" value="@Model.Id" />
+            <label>Your message</label>
+            <textarea name="message" rows="5" placeholder="Tell the provider what you need and your preferred schedule."></textarea>
+            <button class="btn block">Send Request</button>
+        </form>
+    </div>
+</div>
