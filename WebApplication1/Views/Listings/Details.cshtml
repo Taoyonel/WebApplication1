@@ -1,0 +1,59 @@
+﻿@model Listing
+@{
+    ViewData["Title"] = Model.Title;
+    UserAccount owner = DataStore.FindUserById(Model.OwnerId);
+
+    string idText = Context.Session.GetString("UserId");
+    UserAccount me = null;
+    if (idText != null)
+    {
+        me = DataStore.FindUserById(int.Parse(idText));
+    }
+}
+<div class="container narrow section">
+    <div class="panel">
+        <span class="tag @(Model.Type == "Tutor" ? "tutor" : "service")">@Model.Type</span>
+        <span class="tag">@Model.Category</span>
+        @if (Model.IsActive == false)
+        {
+            <span class="tag bad">Inactive</span>
+        }
+
+        <h1>@Model.Title</h1>
+        <p>@Model.Description</p>
+        <div class="price big">
+            <span class="star">★</span> @(Model.Rating > 0 ? Model.Rating.ToString("0.0") : "New")
+            · ₱@Model.HourlyRate.ToString("0") <span>/ hour</span>
+        </div>
+
+        <hr />
+        <div class="profile-head">
+            <div class="avatar big">@owner.GetInitial()</div>
+            <div>
+                <strong>@owner.FullName</strong>
+                <div class="muted">@(owner.Location == "" ? "Location not set" : owner.Location)</div>
+            </div>
+        </div>
+        <p class="muted">@(owner.Bio == "" ? "This provider has not added a bio yet." : owner.Bio)</p>
+
+        @if (me == null)
+        {
+            <a class="btn block" href="/Account/Login">Login to send a request</a>
+        }
+        else if (me.Role == "Admin")
+        {
+            <form method="post" action="/Admin/DeleteListing" onsubmit="return confirm('Remove this listing?');">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button class="btn danger block">Remove Listing (Admin)</button>
+            </form>
+        }
+        else if (me.Id == Model.OwnerId)
+        {
+            <a class="btn block" href="/Listings/Edit/@Model.Id">Edit My Listing</a>
+        }
+        else if (Model.IsActive)
+        {
+            <a class="btn block" href="/Requests/Create?listingId=@Model.Id">Send a Request</a>
+        }
+    </div>
+</div>

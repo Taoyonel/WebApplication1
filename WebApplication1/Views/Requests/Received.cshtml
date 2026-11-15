@@ -1,0 +1,58 @@
+﻿@model List<ServiceRequest>
+@{ ViewData["Title"] = "Received Requests"; }
+<div class="container section">
+    <h1>Received Requests</h1>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty">No one has requested your listings yet.</div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Listing</th><th>Requester</th><th>Message</th><th>Date</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    ServiceRequest r = Model[i];
+                    Listing listing = DataStore.FindListing(r.ListingId);
+                    UserAccount requester = DataStore.FindUserById(r.RequesterId);
+                    <tr>
+                        <td>@listing.Title</td>
+                        <td>@requester.FullName</td>
+                        <td>@r.Message</td>
+                        <td>@r.DateSent.ToString("MMM dd, yyyy")</td>
+                        <td><span class="status @r.Status.ToLower()">@r.Status</span></td>
+                        <td class="actions">
+                            @if (r.Status == "Pending")
+                            {
+                                <form method="post" action="/Requests/ChangeStatus">
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <input type="hidden" name="newStatus" value="Accepted" />
+                                    <button class="btn sm">Accept</button>
+                                </form>
+                                <form method="post" action="/Requests/ChangeStatus">
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <input type="hidden" name="newStatus" value="Declined" />
+                                    <button class="btn sm ghost">Decline</button>
+                                </form>
+                            }
+                            @if (r.Status == "Accepted")
+                            {
+                                <form method="post" action="/Requests/ChangeStatus">
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <input type="hidden" name="newStatus" value="Completed" />
+                                    <button class="btn sm">Mark Completed</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

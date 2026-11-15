@@ -1,0 +1,45 @@
+﻿@model List<ServiceRequest>
+@{ ViewData["Title"] = "My Requests"; }
+<div class="container section">
+    <h1>My Requests</h1>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty">You have not sent any requests yet.</div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Listing</th><th>Provider</th><th>Message</th><th>Date</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    ServiceRequest r = Model[i];
+                    Listing listing = DataStore.FindListing(r.ListingId);
+                    UserAccount provider = DataStore.FindUserById(listing.OwnerId);
+                    <tr>
+                        <td>@listing.Title</td>
+                        <td>@provider.FullName</td>
+                        <td>@r.Message</td>
+                        <td>@r.DateSent.ToString("MMM dd, yyyy")</td>
+                        <td><span class="status @r.Status.ToLower()">@r.Status</span></td>
+                        <td class="actions">
+                            @if (r.Status == "Pending")
+                            {
+                                <form method="post" action="/Requests/ChangeStatus">
+                                    <input type="hidden" name="id" value="@r.Id" />
+                                    <input type="hidden" name="newStatus" value="Cancelled" />
+                                    <button class="btn sm ghost">Cancel</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

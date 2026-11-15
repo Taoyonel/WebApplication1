@@ -1,183 +1,49 @@
-﻿@{
+﻿@model List<Listing>
+@{
     ViewData["Title"] = "Home";
+    string[] popular = { "Math", "Programming", "Design", "Guitar", "Repair" };
 }
+<section class="hero">
+    <div class="container center">
+        <span class="badge">✨ Local tutors &amp; trusted service providers</span>
+        <h1>Learn a Skill or <span class="yellow">Hire Someone</span></h1>
+        <p class="lead">Find tutors to help you learn or local people who can provide the service you need.</p>
 
-<!-- ============ NAVBAR ============ -->
-<header class="navbar" id="navbar">
-    <div class="container nav-inner">
-        <a href="#home" class="brand">
-            <span class="brand-mark">S</span>
-            <span class="brand-name">SkillConnect</span>
-        </a>
+        <form class="search" method="get" action="/Listings">
+            <input name="search" placeholder="Search tutors or services..." />
+            <button class="btn">Search</button>
+        </form>
 
-        <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-            <a href="#home" class="nav-link active">Home</a>
-            <a href="#browse" class="nav-link">Browse</a>
-            <a href="#about" class="nav-link">About</a>
-            <button class="btn btn-primary nav-login" id="loginBtn">Login</button>
-        </nav>
-
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
-    </div>
-</header>
-
-<main>
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="home">
-        <div class="hero-bg">
-            <span class="blob blob-1"></span>
-            <span class="blob blob-2"></span>
-            <span class="blob blob-3"></span>
+        <div class="popular">
+            <span>Popular:</span>
+            @for (int i = 0; i < popular.Length; i++)
+            {
+                <a class="chip-light" href="/Listings?search=@popular[i]">@popular[i]</a>
+            }
         </div>
 
-        <div class="container hero-content">
-            <span class="hero-badge">✨ Local tutors &amp; trusted service providers</span>
-            <h1>Learn a Skill or <span class="gradient-text">Hire Someone</span></h1>
-            <p class="hero-sub">Find tutors to help you learn or local people who can provide the service you need.</p>
-
-            <form class="search-box" id="searchForm" role="search">
-                <svg class="icon search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
-                <input type="text" id="searchInput" placeholder="Search tutors or services..." autocomplete="off" />
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
-
-            <div class="popular">
-                <span>Popular:</span>
-                <button type="button" class="chip" data-search="Math">Math</button>
-                <button type="button" class="chip" data-search="Programming">Programming</button>
-                <button type="button" class="chip" data-search="Design">Design</button>
-                <button type="button" class="chip" data-search="Guitar">Guitar</button>
-                <button type="button" class="chip" data-search="Repair">Repair</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ QUICK ACTION CARDS ============ -->
-    <section class="container quick-cards">
-        <button class="quick-card" data-type="tutor">
-            <span class="quick-icon blue">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z" /><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" /></svg>
-            </span>
-            <h3>Find a Tutor</h3>
-            <p>Learn from someone with experience.</p>
-            <span class="quick-arrow">→</span>
-        </button>
-
-        <button class="quick-card" data-type="service">
-            <span class="quick-icon green">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z" /></svg>
-            </span>
-            <h3>Hire a Service</h3>
-            <p>Get help with a task or repair.</p>
-            <span class="quick-arrow">→</span>
-        </button>
-
-        <button class="quick-card active" data-type="all">
-            <span class="quick-icon amber">
-                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
-            </span>
-            <h3>View Everything</h3>
-            <p>Browse all available listings.</p>
-            <span class="quick-arrow">→</span>
-        </button>
-    </section>
-
-    <!-- ============ LISTINGS ============ -->
-    <section class="listings" id="browse">
-        <div class="container">
-            <div class="section-head">
-                <div>
-                    <h2>Available Tutors and Services</h2>
-                    <p>Select a category or search for what you need.</p>
-                </div>
-                <span class="result-count" id="resultCount"></span>
-            </div>
-
-            <!-- Category buttons are created automatically by script.js -->
-            <div class="filters" id="filters"></div>
-
-            <div class="grid" id="listingGrid"></div>
-
-            <div class="empty-state" id="emptyState" hidden>
-                <div class="empty-icon">🔍</div>
-                <h3>No results found</h3>
-                <p>Try a different keyword or choose another category.</p>
-                <button class="btn btn-outline" id="resetBtn">Reset filters</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ HOW IT WORKS ============ -->
-    <section class="how" id="about">
-        <div class="container">
-            <h2 class="center">How It Works</h2>
-            <p class="center sub">Getting started takes just three simple steps.</p>
-
-            <div class="steps">
-                <div class="step">
-                    <span class="step-num">1</span>
-                    <h3>Search</h3>
-                    <p>Find the tutor or service that you need.</p>
-                </div>
-                <div class="step">
-                    <span class="step-num">2</span>
-                    <h3>Contact</h3>
-                    <p>View the details and send a request.</p>
-                </div>
-                <div class="step">
-                    <span class="step-num">3</span>
-                    <h3>Learn or Hire</h3>
-                    <p>Meet the provider and complete the session.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
-    <div class="container footer-inner">
-        <a href="#home" class="brand light">
-            <span class="brand-mark">S</span>
-            <span class="brand-name">SkillConnect</span>
-        </a>
-        <p>© <span id="year"></span> SkillConnect. All rights reserved.</p>
-    </div>
-</footer>
-
-<!-- ============ DETAILS MODAL ============ -->
-<div class="modal" id="detailModal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <button class="modal-close" data-close aria-label="Close">×</button>
-        <div class="modal-body" id="modalBody"></div>
-    </div>
-</div>
-
-<!-- ============ LOGIN MODAL ============ -->
-<div class="modal" id="loginModal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <div class="modal-card small" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-        <button class="modal-close" data-close aria-label="Close">×</button>
-        <div class="modal-body">
-            <h2 id="loginTitle">Welcome back</h2>
-            <p class="muted">Log in to contact tutors and service providers.</p>
-            <form id="loginForm" class="form">
-                <label>
-                    Email
-                    <input type="email" placeholder="you@@example.com" required />
-                </label>
-                <label>
-                    Password
-                    <input type="password" placeholder="••••••••" required />
-                </label>
-                <button type="submit" class="btn btn-primary block">Login</button>
-            </form>
+        <div class="grid3 actions-grid">
+            <a class="action" href="/Listings?type=Tutor">
+                <div class="ico purple">📖</div><h4>Find a Tutor</h4><p>Learn from someone with experience.</p>
+            </a>
+            <a class="action" href="/Listings?type=Service">
+                <div class="ico green">🔧</div><h4>Hire a Service</h4><p>Get help with a task or repair.</p>
+            </a>
+            <a class="action" href="/Listings">
+                <div class="ico yellow">▦</div><h4>View Everything</h4><p>Browse all available listings.</p>
+            </a>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Toast -->
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<section class="section">
+    <div class="container">
+        <h2>Featured Tutors and Services</h2>
+        <div class="grid3">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <partial name="_ListingCard" model="Model[i]" />
+            }
+        </div>
+    </div>
+</section>

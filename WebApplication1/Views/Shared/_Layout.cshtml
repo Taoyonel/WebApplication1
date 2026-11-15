@@ -1,19 +1,64 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string idText = Context.Session.GetString("UserId");
+    UserAccount me = null;
+    if (idText != null)
+    {
+        me = DataStore.FindUserById(int.Parse(idText));
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SkillConnect – Learn a Skill or Hire Someone</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - SkillConnect</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    <header class="nav">
+        <div class="container nav-in">
+            <a class="brand" href="/"><span class="logo">S</span>SkillConnect</a>
+            <nav class="links">
+                <a href="/">Home</a>
+                <a href="/Listings">Browse</a>
+                <a href="/Home/About">About</a>
 
-    @RenderBody()
+                @if (me == null)
+                {
+                    <a class="btn" href="/Account/Login">Login</a>
+                }
+                else
+                {
+                    if (me.Role == "Professional")
+                    {
+                        <a href="/Listings/Mine">My Listings</a>
+                        <a href="/Requests/Received">Received</a>
+                    }
+                    if (me.Role == "Admin")
+                    {
+                        <a href="/Admin">Admin</a>
+                    }
+                    else
+                    {
+                        <a href="/Requests/Sent">My Requests</a>
+                    }
+                    <a href="/Account/Profile">@me.FullName</a>
+                    <form method="post" action="/Account/Logout" class="inline">
+                        <button class="btn">Logout</button>
+                    </form>
+                }
+            </nav>
+        </div>
+    </header>
 
-    <script src="~/js/site.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @if (TempData["Message"] != null)
+    {
+        <div class="container"><div class="alert">@TempData["Message"]</div></div>
+    }
+
+    <main>@RenderBody()</main>
+
+    <footer><div class="container">© 2026 SkillConnect · Learn a skill or hire someone.</div></footer>
 </body>
 </html>

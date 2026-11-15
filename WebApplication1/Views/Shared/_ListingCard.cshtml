@@ -1,0 +1,22 @@
+﻿@model Listing
+@{
+    UserAccount owner = DataStore.FindUserById(Model.OwnerId);
+}
+<div class="card">
+    <div class="card-top">
+        <div class="avatar">@owner.GetInitial()</div>
+        <span class="tag @(Model.Type == "Tutor" ? "tutor" : "service")">@Model.Type</span>
+    </div>
+    <div class="card-body">
+        <h3>@Model.Title</h3>
+        <div class="by">@owner.FullName</div>
+        <p>@Model.Description</p>
+    </div>
+    <div class="card-foot">
+        <div>
+            <div class="rate"><span class="star">★</span> @(Model.Rating > 0 ? Model.Rating.ToString("0.0") : "New")</div>
+            <div class="price">₱@Model.HourlyRate.ToString("0") <span>/ hour</span></div>
+        </div>
+        <a class="btn" href="/Listings/Details/@Model.Id">View Details</a>
+    </div>
+</div>
