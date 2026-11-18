@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SkillConnect.Data;
-using SkillConnect.Models;
+using SkillHub.Data;
+using SkillHub.Models;
 
-namespace SkillConnect.Controllers;
+namespace SkillHub.Controllers;
 
 public class AdminController : BaseController
 {

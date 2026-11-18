@@ -1,6 +1,6 @@
-﻿using SkillConnect.Models;
+﻿using SkillHub.Models;
 
-namespace SkillConnect.Data;
+namespace SkillHub.Data;
 
 public static class DataStore
 {
@@ -17,11 +17,11 @@ public static class DataStore
     // ---------- SAMPLE DATA ----------
     public static void LoadSampleData()
     {
-        AddUser("System Admin", "admin@skillconnect.com", "Admin123!", "Admin");
+        AddUser("System Admin", "admin@skillhub.com", "Admin123!", "Admin");
 
-        AddSample("Angelica Reyes", "angelica@skillconnect.com", "Mathematics Tutor", "I can help with algebra, geometry, and basic calculus.", "Education", "Tutor", 300, 4.8);
-        AddSample("Kristine Bautista", "kristine@skillconnect.com", "English Language Tutor", "Friendly English lessons for speaking, writing, and grammar.", "Education", "Tutor", 250, 4.7);
-        AddSample("Paolo Villanueva", "paolo@skillconnect.com", "Science Tutor", "Physics, chemistry, and biology explained in a simple way.", "Education", "Tutor", 350, 4.8);
+        AddSample("Angelica Reyes", "angelica@skillhub.com", "Mathematics Tutor", "I can help with algebra, geometry, and basic calculus.", "Education", "Tutor", 300, 4.8);
+        AddSample("Kristine Bautista", "kristine@skillhub.com", "English Language Tutor", "Friendly English lessons for speaking, writing, and grammar.", "Education", "Tutor", 250, 4.7);
+        AddSample("Paolo Villanueva", "paolo@skillhub.com", "Science Tutor", "Physics, chemistry, and biology explained in a simple way.", "Education", "Tutor", 350, 4.8);
     }
 
     private static void AddSample(string name, string email, string title, string description, string category, string type, decimal rate, double rating)
